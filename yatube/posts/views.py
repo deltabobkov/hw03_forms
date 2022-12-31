@@ -62,8 +62,6 @@ def post_create(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data["text"]
-            group = form.cleaned_data["group"]
             posts = form.save(commit=False)
             posts.author = request.user
             posts.save()
