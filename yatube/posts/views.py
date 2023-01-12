@@ -1,12 +1,10 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
-
-
 from constants import POSTS_PER_PAGE
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Group, Post, User
 from .forms import PostForm
+from .models import Group, Post, User
 
 
 def index(request):
@@ -36,10 +34,11 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.all()
+    posts_num = author.posts.count
     paginator = Paginator(posts, POSTS_PER_PAGE)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    context = {"posts": posts, "page_obj": page_obj, "author": author}
+    context = {"posts": posts, "page_obj": page_obj, "author": author, "posts_num":posts_num}
     return render(request, "posts/profile.html", context)
 
 
@@ -60,7 +59,7 @@ def post_detail(request, post_id):
 def post_create(request):
     form = PostForm()
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST or None)
         if form.is_valid():
             posts = form.save(commit=False)
             posts.author = request.user
