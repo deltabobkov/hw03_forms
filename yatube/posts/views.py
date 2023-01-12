@@ -38,7 +38,12 @@ def profile(request, username):
     paginator = Paginator(posts, POSTS_PER_PAGE)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    context = {"posts": posts, "page_obj": page_obj, "author": author, "posts_num":posts_num}
+    context = {
+        "posts": posts,
+        "page_obj": page_obj,
+        "author": author,
+        "posts_num": posts_num,
+    }
     return render(request, "posts/profile.html", context)
 
 
