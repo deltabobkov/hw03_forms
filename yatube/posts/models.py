@@ -18,6 +18,7 @@ class Group(models.Model):
 
 
 class Post(models.Model):
+    STRING_LENGTH = 30
     text = models.TextField("post text")
     pub_date = models.DateTimeField("date of publication", auto_now_add=True)
     author = models.ForeignKey(
@@ -41,4 +42,4 @@ class Post(models.Model):
         ordering = ["-pub_date"]
 
     def __str__(self) -> str:
-        return self.text[:30]
+        return self.text[:Post.STRING_LENGTH]
